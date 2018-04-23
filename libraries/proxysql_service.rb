@@ -311,6 +311,18 @@ class Chef
         end
 
         # Remove package defaults
+        if new_resource.service_provider == :systemd
+          execute 'remove systemd service' do
+            command <<-EOS
+              systemctl stop proxysql
+              systemctl disable proxysql
+              rm /lib/systemd/system/proxysql.service
+              systemctl daemon-reload
+              systemctl reset-failed
+            EOS
+          end
+        end
+
         %w[
           /etc/proxysql.cnf
           /etc/proxysql-admin.cnf
