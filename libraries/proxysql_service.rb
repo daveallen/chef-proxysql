@@ -320,6 +320,7 @@ class Chef
               systemctl daemon-reload
               systemctl reset-failed
             EOS
+            only_if { ::File.exist?('/lib/systemd/system/proxysql.service') }
           end
         end
 
